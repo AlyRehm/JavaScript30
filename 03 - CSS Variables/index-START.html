@@ -29,13 +29,13 @@
       --blur: 10px;
     }
 
-    img{
+    img {
       padding: var(--spacing);
       background: var(--base);
       filter: blur(var(--blur));
     }
 
-    .h1{
+    .hl {
       color: var(--base);
     }
 
@@ -58,6 +58,23 @@
   </style>
 
   <script>
+    const inputs = document.querySelectorAll('.controls input');
+
+    function handleUpdate() {
+      console.log(this.value); 
+
+      // dataset is an object that contains all the data attirbutes
+      // need to inlcude "or nothing ||'' because the color doesnt have a dataset 
+      const suffix = this.dataset.sizing || '';
+      
+      // this calls each input by the name. 
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+    }
+
+      // listen for a change event on each of the inputs. forEach to loop through each of them 
+    inputs.forEach(input => input.addEventListener('change', handleUpdate));
+    // trigger a change when adjusting the scale using a mouse over
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
   </script>
 
 </body>
