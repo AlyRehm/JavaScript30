@@ -27,6 +27,7 @@
     .panels {
       min-height: 100vh;
       overflow: hidden;
+      display: flex;
     }
 
     .panel {
@@ -44,6 +45,13 @@
       font-size: 20px;
       background-size: cover;
       background-position: center;
+      /* evenly distrubutes the space amonst all the columns on the child flex */
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      /* stacks everything on top and formats in a column */
+      flex-direction: column;
     }
 
     .panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
@@ -57,7 +65,21 @@
       margin: 0;
       width: 100%;
       transition: transform 0.5s;
+      flex: 1 0 auto;
+      /* nesting display flex within itself to get all the content centered in all the places  */
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
+
+    /* new code */
+    /* this puts the first children off screen */
+    .panel > *:first-child {transform: translateY(-100%);}
+    /* this brings it back */
+    .panel.open-active > *:first-child {transform: translate(0);}
+
+    .panel > *:last-child {transform: translateY(100%);}
+    .panel.open-active > *:last-child {transform: translate(0);}
 
     .panel p {
       text-transform: uppercase;
@@ -72,6 +94,8 @@
 
     .panel.open {
       font-size: 40px;
+      /* this means, when class open is applied, it will use 5x the size of the other columns */
+      flex: 5;
     }
 
   </style>
@@ -106,7 +130,28 @@
   </div>
 
   <script>
+    // get all the panels - provides node list of all panels
+    const panels = document.querySelectorAll('.panel');
 
+    function toggleOpen(){
+      // this makes the panels get wider
+      this.classList.toggle('open');
+    }
+
+    function toggleActive(e){
+      // this brings the top/bottom words down
+      // this will show us which property we are trying to access
+      console.log(e.propertyName);
+      if (e.propertyName.includes('flex')){
+        this.classList.toggle('open-active'); 
+      }
+    }
+
+    // for each panel, it will listen for a click, then run the toggleOpen function
+    panels.forEach(panel => panel.addEventListener('click', toggleOpen));
+
+    // listen for an end event
+    panels.forEach(panel => panel.addEventListener('transitionend', toggleActive));
   </script>
 
 
